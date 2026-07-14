@@ -1,0 +1,15 @@
+http:
+  routers:
+    nextcloud:
+      rule: "Host(`nextcloud.scinca.dev`)"
+      entryPoints:
+        - websecure
+      service: nextcloud-service
+      tls:
+        certResolver: cloudflare
+
+  services:
+    nextcloud-service:
+      loadBalancer:
+        servers:
+          - url: "http://nextcloud-aio-apache:11000"

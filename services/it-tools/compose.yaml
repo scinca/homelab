@@ -1,0 +1,18 @@
+services:
+  it-tools:
+    image: corentinth/it-tools:latest # Updates only happen like once every few years so ill use latest.
+    container_name: it-tools
+    restart: unless-stopped
+    networks:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.it-tools.rule=Host(`it-tools.scinca.dev`)"
+      - "traefik.http.routers.it-tools.entrypoints=websecure"
+      - "traefik.http.routers.it-tools.tls=true"
+      - "traefik.http.routers.it-tools.tls.certresolver=cloudflare"
+      - "traefik.http.services.it-tools.loadbalancer.server.port=80"
+
+networks:
+  frontend:
+    external: true

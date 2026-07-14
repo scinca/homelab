@@ -1,0 +1,36 @@
+---
+- name: Deploy containers
+  hosts: homelab
+  become: true
+  gather_facts: false
+  vars:
+    services_root: /opt/services
+  tasks:
+    - name: Ensure service directories exist
+      ansible.builtin.file:
+        path: "{{ services_root }}/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ services }}"
+
+    - name: Copy compose files and configs
+      ansible.builtin.copy:
+        src: "../services/{{ item }}/" # local dest so no {{ services_root }}
+        dest: "{{ services_root }}/{{ item }}/"
+        mode: '0644'
+      loop: "{{ services }}"
+
+    - name: Render .env files
+      ansible.builtin.template:
+        src: "../services/{{ item }}/env.j2"
+        dest: "{{ services_root }}/{{ item }}/.env"
+        mode: '0600'
+      loop: "{{ require_templating }}"
+      no_log: true
+
+    - name: Deploy/update service
+      community.docker.docker_compose_v2:
+        project_src: "{{ services_root }}/{{ item }}"
+        state: present
+        remove_orphans: true
+      loop: "{{ services }}"

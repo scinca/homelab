@@ -1,0 +1,71 @@
+---
+- name: Setup Docker on new hosts
+  hosts: digi # Placeholder for when new host needs setup
+  become: true
+  vars:
+    docker_gpg_key_path: /etc/apt/keyrings/docker.asc
+    docker_repo_path: /etc/apt/sources.list.d/docker.sources
+
+
+  tasks:
+    - name: Setup dependencies for Docker
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+        name:
+          - ca-certificates
+          - curl
+        state: present
+
+    - name: Ensure /etc/apt/keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: Download docker gpg key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/debian/gpg
+        dest: "{{ docker_gpg_key_path }}"
+        mode: '0644'
+        force: true
+
+    - name: Ensure gpg key is world readable
+      ansible.builtin.file:
+        path: "{{ docker_gpg_key_path }}"
+        mode: 'a+r'
+
+    - name: Gather dpkg architecture
+      ansible.builtin.command: dpkg --print-architecture # Prints amd64 on test system
+      register: dpkg_arch
+      changed_when: false
+
+    - name: Add Docker Apt repository
+      ansible.builtin.copy:
+        dest: "{{ docker_repo_path }}"
+        content: |
+          Types: deb
+          URIs: https://download.docker.com/linux/debian
+          Suites: {{ ansible_facts["distribution_release"] }}
+          Components: stable
+          Architectures: {{ dpkg_arch.stdout }}
+          Signed-By: {{ docker_gpg_key_path }}
+        mode: '0644'
+
+    - name: Install Docker packages
+      ansible.builtin.apt:
+        update_cache: true
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+
+    - name: Enable docker service
+      ansible.builtin.systemd_service:
+        name: docker
+        enabled: true
+        masked: false

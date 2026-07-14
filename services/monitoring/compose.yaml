@@ -1,0 +1,57 @@
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.scinca.dev`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.routers.grafana.tls.certresolver=cloudflare"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+
+  prometheus:
+     image: prom/prometheus:${PROMETHEUS_VERSION:-v3.11.3}
+     container_name: prometheus
+     restart: unless-stopped
+     networks:
+       - frontend
+     command:
+       - --web.enable-remote-write-receiver
+       - --storage.tsdb.path=/prometheus
+       - --config.file=/etc/prometheus/prometheus.yml
+     volumes:
+        - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml:ro
+        - prometheus-data:/prometheus
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    networks:
+      - frontend
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+
+volumes:
+  prometheus-data:
+    name: prometheus-data
+  grafana-data:
+    name: grafana-data
+
+networks:
+  frontend:
+    external: true
+

@@ -1,0 +1,13 @@
+services:
+  - traefik
+  - vaultwarden
+  - it-tools
+  - bentopdf
+  - technitium-dns
+  - authentik
+  - monitoring
+
+require_templating: # this is the section for each item that needs the environment variables injected.
+  - authentik
+  - traefik
+  - monitoring

@@ -1,0 +1,41 @@
+services:
+  traefik:
+    image: traefik:v3.7
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./dynamic.yaml:/etc/traefik/dynamic.yaml:ro
+      - ./acme.json:/acme.json:rw
+    restart: unless-stopped
+    networks:
+      - frontend
+    environment:
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN}
+      - CF_API_EMAIL=${CF_API_EMAIL}
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp
+
+networks:
+  frontend:
+    name: frontend
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: "172.18.0.0/16"
+        - subnet: "fd3a:4b6c:9d12:2::/64"
+

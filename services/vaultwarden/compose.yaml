@@ -1,0 +1,31 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:1.36.0
+    container_name: vaultwarden
+    restart: unless-stopped
+    networks:
+      - frontend
+    environment:
+      DOMAIN: "https://vw.scinca.dev"
+    volumes:
+      - vaultwarden_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vaultwarden.rule=Host(`vw.scinca.dev`)"
+      - "traefik.http.routers.vaultwarden.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden.tls=true"
+      - "traefik.http.routers.vaultwarden.tls.certresolver=cloudflare"
+      - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  vaultwarden_data:
+    driver: local
+    name: vaultwarden_data
+
+networks:
+  frontend:
+    external: true

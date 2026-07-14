@@ -1,0 +1,42 @@
+# --- Terraform ---
+# Local state files (contain secrets, shouldn't be shared)
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variable files that may contain sensitive data
+*.tfvars
+*.tfvars.json
+# (unless you specifically want to commit example/non-sensitive ones,
+#  e.g. re-allow with: !example.tfvars)
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Provider plugins / init cache
+.terraform/
+.terraform.lock.hcl   # debated — see note below
+
+# Plan output files
+*.tfplan
+*.plan
+
+# --- Ansible ---
+# Vault password files (never commit these)
+.vault_pass
+vault_pass.txt
+*.vault_pass
+
+# Retry files
+*.retry

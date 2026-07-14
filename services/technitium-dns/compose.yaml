@@ -1,0 +1,32 @@
+services:
+  dns-server:
+    container_name: dns-server
+    hostname: dns-server
+    image: technitium/dns-server:15.3.0
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.technitium.rule=Host(`technitium.scinca.dev`)"
+      - "traefik.http.routers.technitium.entrypoints=websecure"
+      - "traefik.http.routers.technitium.tls=true"
+      - "traefik.http.routers.technitium.tls.certresolver=cloudflare"
+      - "traefik.http.services.technitium.loadbalancer.server.port=5380"
+    environment:
+      - DNS_SERVER_DOMAIN=technitium.scinca.dev
+      - DNS_SERVER_LOG_USING_LOCAL_TIME=true
+    volumes:
+      - technitium_config:/etc/dns
+    restart: unless-stopped
+
+volumes:
+  technitium_config:
+    driver: local
+    name: technitium_config
+
+networks:
+  frontend:
+    external: true

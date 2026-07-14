@@ -1,0 +1,18 @@
+services:
+  bentopdf:
+    image: ghcr.io/alam00000/bentopdf-simple:latest
+    container_name: bentopdf
+    restart: unless-stopped
+    networks:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bentopdf.rule=Host(`pdf.scinca.dev`)"
+      - "traefik.http.routers.bentopdf.entrypoints=websecure"
+      - "traefik.http.routers.bentopdf.tls=true"
+      - "traefik.http.routers.bentopdf.tls.certresolver=cloudflare"
+      - "traefik.http.services.bentopdf.loadbalancer.server.port=8080"
+
+networks:
+  frontend:
+    external: true
