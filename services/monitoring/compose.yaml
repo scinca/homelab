@@ -31,7 +31,7 @@ services:
         - prometheus-data:/prometheus
 
   node_exporter:
-    image: prom/node-exporter:v1.12.0-distroless
+    image: prom/node-exporter:v1.12.1-distroless
     container_name: node_exporter
     restart: unless-stopped
     networks:
