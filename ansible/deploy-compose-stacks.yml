@@ -26,7 +26,7 @@
         dest: "{{ services_root }}/{{ item }}/.env"
         mode: '0600'
       loop: "{{ require_templating }}"
-      no_log: true
+      no_log: true # !!! Important to not log any api keys.
 
     - name: Deploy/update service
       community.docker.docker_compose_v2:
