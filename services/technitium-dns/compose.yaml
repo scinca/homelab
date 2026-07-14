@@ -2,7 +2,7 @@ services:
   dns-server:
     container_name: dns-server
     hostname: dns-server
-    image: technitium/dns-server:15.3.0
+    image: technitium/dns-server:15.4.0
     ports:
       - "53:53/tcp"
       - "53:53/udp"

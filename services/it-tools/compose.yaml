@@ -1,6 +1,6 @@
 services:
   it-tools:
-    image: corentinth/it-tools:latest # Updates only happen like once every few years so ill use latest.
+    image: corentinth/it-tools:2024.10.22-7ca5933
     container_name: it-tools
     restart: unless-stopped
     networks:

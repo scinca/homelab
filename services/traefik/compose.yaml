@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    dns:
+    dns: # Use public resolvers so that traefik doesn't use the internal dns to request TLS certs.
       - 1.1.1.1
       - 8.8.8.8
     extra_hosts:

@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Check compose.yaml image tags across all services/<servicename> folders
+  - package-ecosystem: "docker-compose"
+    directories:
+      - "/services/*"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 20
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore(docker)"
