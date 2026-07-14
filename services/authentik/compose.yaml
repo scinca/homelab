@@ -3,9 +3,9 @@ services:
     container_name: authentik_postgres
     env_file: .env
     environment:
-      - POSTGRES_DB=${PG_DB:-authentik}
+      - POSTGRES_DB=authentik
       - POSTGRES_PASSWORD=${PG_PASS}
-      - POSTGRES_USER=${PG_USER:-authentik}
+      - POSTGRES_USER=authentik
     healthcheck:
       interval: 30s
       retries: 5
