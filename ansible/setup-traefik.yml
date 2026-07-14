@@ -32,7 +32,7 @@
         src: "../services/traefik/env.j2"
         dest: "{{ services_root }}/traefik/.env"
         mode: '0600'
-        no_log: true
+      no_log: true
 
     - name: Deploy/update service
       community.docker.docker_compose_v2:

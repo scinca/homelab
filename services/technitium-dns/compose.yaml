@@ -11,9 +11,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.technitium.rule=Host(`technitium.scinca.dev`)"
-      - "traefik.http.routers.technitium.entrypoints=websecure"
-      - "traefik.http.routers.technitium.tls=true"
-      - "traefik.http.routers.technitium.tls.certresolver=cloudflare"
       - "traefik.http.services.technitium.loadbalancer.server.port=5380"
     environment:
       - DNS_SERVER_DOMAIN=technitium.scinca.dev

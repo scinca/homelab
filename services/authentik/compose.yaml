@@ -48,9 +48,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=frontend"
       - "traefik.http.routers.authentik.rule=Host(`authentik.scinca.dev`)"
-      - "traefik.http.routers.authentik.entrypoints=websecure"
-      - "traefik.http.routers.authentik.tls=true"
-      - "traefik.http.routers.authentik.tls.certresolver=cloudflare"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
     security_opt:
       - no-new-privileges:true

@@ -17,9 +17,14 @@ entrypoints:
         entryPoint:
           to: websecure
           scheme: https
+          permanent: true
 
   websecure:
     address: "[::]:443"
+    asDefault: true
+    http:
+      tls:
+        certResolver: cloudflare
 
 
   metrics:
@@ -36,6 +41,7 @@ certificatesResolvers:
 
 providers:
   docker:
+    defaultRule: "Host(`{{ .Name }}.scinca.dev`)"
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: frontend
