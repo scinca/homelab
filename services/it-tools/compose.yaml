@@ -5,12 +5,8 @@ services:
     restart: unless-stopped
     networks:
       - frontend
-    labels:
+    labels: # container_name defines subdomain
       - "traefik.enable=true"
-      - "traefik.http.routers.it-tools.rule=Host(`it-tools.scinca.dev`)"
-      - "traefik.http.routers.it-tools.entrypoints=websecure"
-      - "traefik.http.routers.it-tools.tls=true"
-      - "traefik.http.routers.it-tools.tls.certresolver=cloudflare"
       - "traefik.http.services.it-tools.loadbalancer.server.port=80"
 
 networks:

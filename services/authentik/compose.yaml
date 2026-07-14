@@ -46,7 +46,6 @@ services:
       - authentik
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=frontend"
       - "traefik.http.routers.authentik.rule=Host(`authentik.scinca.dev`)"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
     security_opt:

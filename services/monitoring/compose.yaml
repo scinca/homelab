@@ -5,12 +5,9 @@ services:
     restart: unless-stopped
     networks:
       - frontend
-    labels:
+    labels: # hostname is specified by default rule with container_name
       - "traefik.enable=true"
       - "traefik.http.routers.grafana.rule=Host(`grafana.scinca.dev`)"
-      - "traefik.http.routers.grafana.entrypoints=websecure"
-      - "traefik.http.routers.grafana.tls=true"
-      - "traefik.http.routers.grafana.tls.certresolver=cloudflare"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     volumes:
       - grafana-data:/var/lib/grafana
