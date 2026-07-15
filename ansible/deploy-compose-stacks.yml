@@ -2,6 +2,7 @@
 - name: Deploy containers
   hosts: homelab
   become: true
+  strategy: free
   gather_facts: false
   vars:
     services_root: /opt/services
@@ -19,6 +20,8 @@
         dest: "{{ services_root }}/{{ item }}/"
         mode: '0644'
       loop: "{{ services }}"
+      poll: 0
+      async: 30
 
     - name: Render .env files
       ansible.builtin.template:
