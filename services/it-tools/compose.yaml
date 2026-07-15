@@ -5,9 +5,9 @@ services:
     restart: unless-stopped
     networks:
       - frontend
-    labels: # container_name defines subdomain
+    labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vaultwarden.rule=Host(`it-tools.scinca.dev`)"
+      - "traefik.http.routers.it-tools.rule=Host(`it-tools.scinca.dev`)"
       - "traefik.http.services.it-tools.loadbalancer.server.port=80"
 
 networks:
