@@ -41,7 +41,6 @@ certificatesResolvers:
 
 providers:
   docker:
-    defaultRule: "Host(`{{ .Name }}.scinca.dev`)"
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: frontend
