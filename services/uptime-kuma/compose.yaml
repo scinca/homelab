@@ -1,0 +1,29 @@
+services:
+  kuma:
+    image: louislam/uptime-kuma:2.4.0
+    container_name: uptime-kuma
+    restart: unless-stopped
+    networks:
+      - frontend
+    volumes:
+      - uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kuma.rule=Host(`uptime-kuma.scinca.dev`)"
+      - "traefik.http.services.kuma.loadbalancer.server.port=3001"
+    environment:
+      - TZ=Europe/Vienna
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3001" ]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
+
+networks:
+  frontend:
+    external: true
+
+volumes:
+  uptime-kuma:
+    name: uptime-kuma
