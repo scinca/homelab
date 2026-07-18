@@ -2,6 +2,7 @@
 - name: Configure UFW firewall
   hosts: all
   become: true
+  gather_facts: false
   roles:
     role: firewall-config
 #    vars:  # Override defaults

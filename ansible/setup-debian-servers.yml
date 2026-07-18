@@ -3,3 +3,5 @@
   hosts: none
   become: true
   roles:
+    - firewall-config
+    - docker
