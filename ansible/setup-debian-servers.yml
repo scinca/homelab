@@ -1,0 +1,3 @@
+---
+- name: Prepare Debian VPS for Production
+  hosts: none

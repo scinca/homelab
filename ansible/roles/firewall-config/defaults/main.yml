@@ -1,0 +1,3 @@
+---
+ufw_logging_level: low
+ufw_ssh_port: '22'
