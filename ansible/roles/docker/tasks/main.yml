@@ -1,0 +1,41 @@
+---
+- name: Setup dependencies for docker
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Get dpkg architecture # Required because ansible facts doesn't print amd64/arm64
+  ansible.builtin.command: dpkg --print-architecture
+  register: docker_arch
+  changed_when: false
+
+- name: Add repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris: https://download.docker.com/linux/debian
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: stable
+    architectures: "{{ docker_arch.stdout }}"
+    signed_by: https://download.docker.com/linux/debian/gpg
+
+- name: Install docker
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+
+- name: Enable systemd service for docker
+  ansible.builtin.systemd_service:
+    name: docker
+    enabled: true
+    masked: false

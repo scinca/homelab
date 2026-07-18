@@ -1,3 +1,5 @@
 ---
 - name: Prepare Debian VPS for Production
   hosts: none
+  become: true
+  roles:

@@ -18,7 +18,7 @@
 
 - name: Enable logging
   community.general.ufw:
-      logging: "{{ ufw_logging_level }}"
+    logging: "{{ ufw_logging_level }}"
 
 - name: Allow SSH
   community.general.ufw:

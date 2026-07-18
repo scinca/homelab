@@ -2,43 +2,5 @@
 - name: Setup Docker on new hosts
   hosts: all
   become: true
-  tasks:
-    - name: Setup dependencies for Docker
-      ansible.builtin.apt:
-        update_cache: true
-        cache_valid_time: 3600
-        name:
-          - ca-certificates
-          - curl
-        state: present
-
-    - name: Gather dpkg architecture
-      ansible.builtin.command: dpkg --print-architecture # Prints amd64/arm64 on test system
-      register: dpkg_arch
-      changed_when: false
-
-    - name: Add Repository
-      ansible.builtin.deb822_repository:
-        name: docker
-        types: deb
-        uris: https://download.docker.com/linux/debian
-        suites: "{{ ansible_facts['distribution_release'] }}"
-        components: stable
-        architectures: "{{ dpkg_arch.stdout }}" # I can't use the ansible fact because it prints x86_64
-        signed_by: https://download.docker.com/linux/debian/gpg
-
-    - name: Install Docker packages
-      ansible.builtin.apt:
-        update_cache: true
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-compose-plugin
-        state: present
-
-    - name: Enable docker service
-      ansible.builtin.systemd_service:
-        name: docker
-        enabled: true
-        masked: false
+  roles:
+    - docker
