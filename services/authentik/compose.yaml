@@ -36,7 +36,7 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_POSTGRESQL__USER: authentik
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
-    image: ghcr.io/goauthentik/server:2026.5.5
+    image: ghcr.io/goauthentik/server:2026.5.6
     restart: unless-stopped
     volumes:
     - data:/data
@@ -65,7 +65,7 @@ services:
       - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS}
       - AUTHENTIK_POSTGRESQL__USER=authentik
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
-    image: ghcr.io/goauthentik/server:2026.5.5
+    image: ghcr.io/goauthentik/server:2026.5.6
     networks:
       - authentik
     restart: unless-stopped
