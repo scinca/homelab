@@ -7,8 +7,10 @@ services:
   - authentik
   - monitoring
   - uptime-kuma
+  - paperless
 
 require_templating: # this is the section for each item that needs the environment variables injected.
   - authentik
   - traefik
   - monitoring
+  - paperless

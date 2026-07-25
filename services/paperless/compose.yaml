@@ -1,0 +1,81 @@
+services:
+  broker:
+    image: docker.io/valkey/valkey:9.1.1-alpine3.24
+    restart: unless-stopped
+    networks:
+      - paperless
+    volumes:
+      - valkey-data:/data
+
+  db:
+    image: docker.io/library/postgres:18.4
+    restart: unless-stopped
+    networks:
+      - paperless
+    volumes:
+      - pgdata:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=paperless
+      - POSTGRES_USER=paperless
+      - POSTGRES_PASSWORD=paperless
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.34
+    restart: unless-stopped
+    networks:
+      - paperless
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  tika:
+    image: docker.io/apache/tika:3.3.1.0
+    restart: unless-stopped
+    networks:
+      - paperless
+
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:3.0.2
+    restart: unless-stopped
+    networks:
+      - paperless
+      - frontend
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+    depends_on:
+      - db
+      - broker
+      - gotenberg
+      - tika
+    environment:
+      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_DBHOST=db
+      - PAPERLESS_DBENGINE=postgresql
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paperless.rule=Host(`paperless.scinca.dev`)"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+
+
+networks:
+  frontend:
+    external: true
+  paperless:
+
+
+volumes:
+  valkey-data:
+    name: paperless-valkey
+  pgdata:
+    name: paperless-postgres
+  data:
+    name: paperless-data
+  media:
+    name: paperless-media
