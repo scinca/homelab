@@ -14,7 +14,7 @@ services:
 
 
   prometheus:
-     image: prom/prometheus:v3.13.1-distroless
+     image: prom/prometheus:v3.13.2-distroless
      container_name: prometheus
      restart: unless-stopped
      networks:
