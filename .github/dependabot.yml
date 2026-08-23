@@ -6,8 +6,6 @@ updates:
       - "/services/*"
     schedule:
       interval: "daily"
-    ignore:
-      - dependency-name: "postgres"
     open-pull-requests-limit: 20
     labels:
       - "dependencies"
