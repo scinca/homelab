@@ -6,9 +6,17 @@ updates:
       - "/services/*"
     schedule:
       interval: "daily"
+# default cooldown is now set to 3 days. (Keeping this since I might change it later)
+#      cooldown:
+#      default-days: 3
+
+    groups:
+      stacks:
+        patterns:
+          "/services/*"
     open-pull-requests-limit: 20
     labels:
       - "dependencies"
       - "docker"
     commit-message:
-      prefix: "chore(docker)"
+      prefix: "Dependencies:"
