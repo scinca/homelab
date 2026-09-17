@@ -12,8 +12,8 @@ updates:
 
     groups:
       stacks:
-        patterns:
-         - "/services/*"
+        patterns: # Since each service is each own context * will group by directory
+         - "*"
     open-pull-requests-limit: 20
     labels:
       - "dependencies"
