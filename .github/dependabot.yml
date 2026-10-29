@@ -5,7 +5,7 @@ updates:
     directories:
       - "/services/*"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 # default cooldown is now set to 3 days. (Keeping this since I might change it later)
 #      cooldown:
 #      default-days: 3
