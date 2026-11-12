@@ -40,3 +40,7 @@ vault_pass.txt
 
 # Retry files
 *.retry
+
+
+# IDE
+.idea/
