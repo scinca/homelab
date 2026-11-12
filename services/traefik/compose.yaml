@@ -1,7 +1,10 @@
 services:
   traefik:
-    image: traefik:v3.7.16
+    image: traefik:v3.7.17
     container_name: traefik
+    depends_on:
+      init_job:
+        condition: service_completed_successfully
     ports:
       - "80:80"
       - "443:443"
@@ -14,7 +17,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./dynamic.yaml:/etc/traefik/dynamic.yaml:ro
-      - ./acme.json:/acme.json:rw
+      - certificates:/certs
     restart: unless-stopped
     networks:
       - frontend
@@ -30,6 +33,22 @@ services:
     tmpfs:
       - /tmp
 
+  init_job:
+    image: alpine:3.24.4
+    container_name: traefik_init
+    restart: no
+    command:
+      - sh
+      - -c
+      - |
+        touch /certs/acme.json
+        chown root:root /certs/acme.json
+        chmod 600 /certs/acme.json
+    volumes:
+      - certificates:/certs
+
+
+
 networks:
   frontend:
     name: frontend
@@ -38,4 +57,7 @@ networks:
       config:
         - subnet: "172.18.0.0/16"
         - subnet: "fd3a:4b6c:9d12:2::/64"
+
+volumes:
+  certificates:
 

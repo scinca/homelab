@@ -1,4 +1,5 @@
 ---
+# This file is still here, even though I moved the acme cert logic into an init job.
 - name: Deploy Traefik
   hosts: homelab
   become: true
