@@ -20,7 +20,7 @@ services:
       - POSTGRES_PASSWORD=paperless
 
   gotenberg:
-    image: docker.io/gotenberg/gotenberg:9.5
+    image: docker.io/gotenberg/gotenberg:9.6
     restart: unless-stopped
     networks:
       - paperless
